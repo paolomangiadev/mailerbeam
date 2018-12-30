@@ -1,5 +1,4 @@
 [![CircleCI](https://circleci.com/gh/paolomangiadev/mailerbeam/tree/master.svg?style=svg)](https://circleci.com/gh/paolomangiadev/mailerbeam/tree/master)
-
 # MailerBeam
 **Email Beam Blaster** :satellite::boom:
 
