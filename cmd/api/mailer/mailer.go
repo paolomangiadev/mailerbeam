@@ -26,6 +26,23 @@ type Mail struct {
 	Address string `json:"address"`
 }
 
+// Send Email Method
+func (mail *Mail) Send(s gomail.SendCloser, wg *sync.WaitGroup, w http.ResponseWriter) {
+	defer wg.Done()
+	// New Gomail Message
+	m := gomail.NewMessage()
+	m.SetHeader("From", "no-reply@example.com")
+	m.SetAddressHeader("To", mail.Address, mail.Name)
+	m.SetHeader("Subject", "Newsletter #1")
+	m.SetBody("text/html", `<p style="color:red">New Message</p>`)
+	fmt.Printf("%v \n", s)
+	if err := gomail.Send(s, m); err != nil {
+		log.Print(err)
+		fmt.Fprintln(w, "Can't send Email")
+	}
+	m.Reset()
+}
+
 // SendEmail controller
 func SendEmail(w http.ResponseWriter, req *http.Request) {
 
@@ -48,8 +65,14 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Email Config
-	d := gomail.NewDialer("smtp.gmail.com", 587, "paolo.mangia.dev@gmail.com", "flfyicqttxpszjlf")
+	d := gomail.NewDialer(
+		"smtp.gmail.com",
+		587,
+		"paolo.mangia.dev@gmail.com",
+		"flfyicqttxpszjlf",
+	)
 	s, err := d.Dial()
+	fmt.Printf("%v \n", s)
 	if err != nil {
 		panic(err)
 	}
@@ -58,25 +81,12 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 	var wg sync.WaitGroup
 	wg.Add(len(list))
 
-	// New Gomail Message
-	m := gomail.NewMessage()
-
-	for _, account := range list {
-		go func(s gomail.SendCloser, m *gomail.Message, account Mail) {
-			defer wg.Done()
-			m.SetHeader("From", "no-reply@example.com")
-			m.SetAddressHeader("To", account.Address, account.Name)
-			m.SetHeader("Subject", "Newsletter #1")
-			m.SetBody("text/html", `<p style="color:red">Mimmoooooo</p>`)
-
-			if err := gomail.Send(s, m); err != nil {
-				log.Printf("Could not send email to %q: %v", account.Address, err)
-			}
-			m.Reset()
-		}(s, m, account)
+	for _, mail := range list {
+		acc := mail
+		go acc.Send(s, &wg, w)
 	}
 
 	wg.Wait()
-
+	s.Close()
 	fmt.Fprintln(w, "Email Sent")
 }
