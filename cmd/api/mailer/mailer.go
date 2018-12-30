@@ -27,7 +27,7 @@ type Mail struct {
 }
 
 // Send Email Method
-func (mail *Mail) Send(s gomail.SendCloser, wg *sync.WaitGroup, w http.ResponseWriter) {
+func (mail *Mail) Send(s *gomail.SendCloser, wg *sync.WaitGroup, w http.ResponseWriter) {
 	defer wg.Done()
 	// New Gomail Message
 	m := gomail.NewMessage()
@@ -35,8 +35,7 @@ func (mail *Mail) Send(s gomail.SendCloser, wg *sync.WaitGroup, w http.ResponseW
 	m.SetAddressHeader("To", mail.Address, mail.Name)
 	m.SetHeader("Subject", "Newsletter #1")
 	m.SetBody("text/html", `<p style="color:red">New Message</p>`)
-	fmt.Printf("%v \n", s)
-	if err := gomail.Send(s, m); err != nil {
+	if err := gomail.Send(*s, m); err != nil {
 		log.Print(err)
 		fmt.Fprintln(w, "Can't send Email")
 	}
@@ -71,8 +70,8 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 		"paolo.mangia.dev@gmail.com",
 		"flfyicqttxpszjlf",
 	)
+
 	s, err := d.Dial()
-	fmt.Printf("%v \n", s)
 	if err != nil {
 		panic(err)
 	}
@@ -83,7 +82,7 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 
 	for _, mail := range list {
 		acc := mail
-		go acc.Send(s, &wg, w)
+		go acc.Send(&s, &wg, w)
 	}
 
 	wg.Wait()

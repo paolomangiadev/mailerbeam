@@ -4,6 +4,9 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -26,7 +29,11 @@ func Routes() *chi.Mux {
 }
 
 func main() {
-	port := ":5000"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	port := os.Getenv("PORT")
 	r := Routes()
 	http.Handle("/", r)
 	log.Printf("Server Listening on %v\n", port)
