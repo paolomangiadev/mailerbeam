@@ -1,7 +1,7 @@
 package api
 
 import (
-	mailer "mailerbeam/cmd/api/mailer"
+	mailer "github.com/paolomangiadev/mailerbeam/cmd/api/mailer"
 
 	"github.com/gorilla/mux"
 )

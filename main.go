@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	routes "mailerbeam/cmd/routes"
+	routes "github.com/paolomangiadev/mailerbeam/cmd/routes"
 )
 
 func main() {

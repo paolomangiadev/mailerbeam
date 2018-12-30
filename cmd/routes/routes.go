@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	api "mailerbeam/cmd/api"
+	api "github.com/paolomangiadev/mailerbeam/cmd/api"
 
 	"github.com/gorilla/mux"
 )
