@@ -1,14 +1,13 @@
 package api
 
 import (
+	"github.com/go-chi/chi"
 	mailer "github.com/paolomangiadev/mailerbeam/cmd/api/mailer"
-
-	"github.com/gorilla/mux"
 )
 
-// Router of Api
-func Router() *mux.Router {
-	r := mux.NewRouter()
-	mailer.MailerHandler(r)
-	return r
+// Routes api definitions
+func Routes() *chi.Mux {
+	router := chi.NewRouter()
+	router.Mount("/mail", mailer.Routes())
+	return router
 }

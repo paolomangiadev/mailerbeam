@@ -8,13 +8,16 @@ import (
 	"net/http"
 	"sync"
 
-	mux "github.com/gorilla/mux"
+	"github.com/go-chi/chi"
+
 	gomail "gopkg.in/gomail.v2"
 )
 
-// MailerHandler is the handler function for the index mail route
-func MailerHandler(r *mux.Router) {
-	r.HandleFunc("/mail", EmailHandler).Methods("POST")
+// Routes is the handler function for the index mail route
+func Routes() *chi.Mux {
+	router := chi.NewRouter()
+	router.Post("/", SendEmail)
+	return router
 }
 
 // Mail structure
@@ -23,8 +26,8 @@ type Mail struct {
 	Address string `json:"address"`
 }
 
-// EmailHandler controller
-func EmailHandler(w http.ResponseWriter, req *http.Request) {
+// SendEmail controller
+func SendEmail(w http.ResponseWriter, req *http.Request) {
 
 	// Read Body
 	body, err := ioutil.ReadAll(req.Body)
