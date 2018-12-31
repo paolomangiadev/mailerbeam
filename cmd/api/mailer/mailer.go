@@ -6,11 +6,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/go-chi/chi"
-
-	gomail "gopkg.in/gomail.v2"
+	sendgrid "github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 // Routes is the handler function for the index mail route
@@ -27,19 +28,16 @@ type Mail struct {
 }
 
 // Send Email Method
-func (mail *Mail) Send(s *gomail.SendCloser, wg *sync.WaitGroup, w http.ResponseWriter) {
+func (acc *Mail) Send(wg *sync.WaitGroup, client *sendgrid.Client, message *mail.SGMailV3) {
 	defer wg.Done()
-	// New Gomail Message
-	m := gomail.NewMessage()
-	m.SetHeader("From", "no-reply@example.com")
-	m.SetAddressHeader("To", mail.Address, mail.Name)
-	m.SetHeader("Subject", "Newsletter #1")
-	m.SetBody("text/html", `<p style="color:red">New Message</p>`)
-	if err := gomail.Send(*s, m); err != nil {
-		log.Print(err)
-		fmt.Fprintln(w, "Can't send Email")
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
 	}
-	m.Reset()
 }
 
 // SendEmail controller
@@ -63,29 +61,23 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// Email Config
-	d := gomail.NewDialer(
-		"smtp.gmail.com",
-		587,
-		"paolo.mangia.dev@gmail.com",
-		"flfyicqttxpszjlf",
-	)
-
-	s, err := d.Dial()
-	if err != nil {
-		panic(err)
-	}
-
 	// Sync Email Waitgroup
 	var wg sync.WaitGroup
 	wg.Add(len(list))
 
-	for _, mail := range list {
-		acc := mail
-		go acc.Send(&s, &wg, w)
+	plainTextContent := "blast emails to your contacts"
+	htmlContent := "<strong>blast emails to your contacts</strong>"
+	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+
+	for _, account := range list {
+		acc := account
+		from := mail.NewEmail("MailerBeam", "no-replay@mailerbeam.com")
+		subject := fmt.Sprintf("Welcome %v, start sending mails with MailerBeam", acc.Name)
+		to := mail.NewEmail(acc.Name, acc.Address)
+		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+		go acc.Send(&wg, client, message)
 	}
 
 	wg.Wait()
-	s.Close()
 	fmt.Fprintln(w, "Email Sent")
 }
