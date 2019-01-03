@@ -27,6 +27,13 @@ type Mail struct {
 	Address string `json:"address"`
 }
 
+// BodyMail structure
+type BodyMail struct {
+	Contacts []Mail `json:"contacts"`
+	HTML     string `json:"html"`
+	Title    string `json:"title"`
+}
+
 // Send Email Method
 func (acc *Mail) Send(wg *sync.WaitGroup, client *sendgrid.Client, message *mail.SGMailV3) {
 	defer wg.Done()
@@ -51,11 +58,9 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// The list of newsletter emails.
-	var list []Mail
-
+	mailbody := BodyMail{}
 	// Unmarshal the body
-	err = json.Unmarshal([]byte(body), &list)
+	err = json.Unmarshal([]byte(body), &mailbody)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -63,13 +68,13 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 
 	// Sync Email Waitgroup
 	var wg sync.WaitGroup
-	wg.Add(len(list))
+	wg.Add(len(mailbody.Contacts))
 
-	plainTextContent := "blast emails to your contacts"
-	htmlContent := "<strong>blast emails to your contacts</strong>"
+	plainTextContent := mailbody.Title
+	htmlContent := mailbody.HTML
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 
-	for _, account := range list {
+	for _, account := range mailbody.Contacts {
 		acc := account
 		from := mail.NewEmail("MailerBeam", "no-replay@mailerbeam.com")
 		subject := fmt.Sprintf("Welcome %v, start sending mails with MailerBeam", acc.Name)
