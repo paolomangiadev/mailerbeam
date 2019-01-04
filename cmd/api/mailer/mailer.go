@@ -70,7 +70,7 @@ func SendEmail(w http.ResponseWriter, req *http.Request) {
 	var wg sync.WaitGroup
 	wg.Add(len(mailbody.Contacts))
 
-	plainTextContent := mailbody.Title
+	plainTextContent := "Hello"
 	htmlContent := mailbody.HTML
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 

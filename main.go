@@ -29,7 +29,7 @@ func Routes() *chi.Mux {
 }
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load(".env", "sendgrid.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
