@@ -10,13 +10,25 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	api "github.com/paolomangiadev/mailerbeam/cmd/api"
 )
 
 // Routes definition
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
+	// Basic CORS
+	cors := cors.New(cors.Options{
+		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
 	router.Use(
+		cors.Handler,
 		middleware.Logger,
 		middleware.DefaultCompress,
 		middleware.RedirectSlashes,
