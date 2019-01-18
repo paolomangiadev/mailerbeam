@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	api "github.com/paolomangiadev/mailerbeam/cmd/api"
+	"github.com/paolomangiadev/mailerbeam/cmd/auth"
 )
 
 // Routes definition
@@ -34,9 +35,15 @@ func Routes() *chi.Mux {
 		middleware.RedirectSlashes,
 		middleware.Recoverer,
 	)
+
+	// Api Routes
 	router.Route("/v1", func(r chi.Router) {
 		r.Mount("/api", api.Routes())
 	})
+
+	// Authentication Routes
+	router.Mount("/auth", auth.Routes())
+
 	return router
 }
 
