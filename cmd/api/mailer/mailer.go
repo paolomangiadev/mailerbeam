@@ -18,6 +18,7 @@ import (
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Post("/", SendEmail)
+	router.Get("/", Protected)
 	return router
 }
 
@@ -45,6 +46,11 @@ func (acc *Mail) Send(wg *sync.WaitGroup, client *sendgrid.Client, message *mail
 		fmt.Println(response.Body)
 		fmt.Println(response.Headers)
 	}
+}
+
+// Protected controller
+func Protected(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintln(w, "PROTECTED ROUTE")
 }
 
 // SendEmail controller

@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth"
 	api "github.com/paolomangiadev/mailerbeam/cmd/api"
 	"github.com/paolomangiadev/mailerbeam/cmd/auth"
 )
@@ -28,16 +29,19 @@ func Routes() *chi.Mux {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
+
 	router.Use(
 		cors.Handler,
 		middleware.Logger,
 		middleware.DefaultCompress,
 		middleware.RedirectSlashes,
 		middleware.Recoverer,
+		jwtauth.Verifier(jwtauth.New("HS256", []byte(os.Getenv("SECRET")), nil)),
 	)
 
 	// Api Routes
 	router.Route("/v1", func(r chi.Router) {
+		r.Use(jwtauth.Authenticator)
 		r.Mount("/api", api.Routes())
 	})
 
