@@ -26,12 +26,17 @@ func Routes() *chi.Mux {
 	return router
 }
 
+// Init Auth
+func Init() *jwtauth.JWTAuth {
+	tokenAuth = jwtauth.New("HS256", []byte(os.Getenv("SECRET")), nil)
+	return tokenAuth
+}
+
 // Login Route
 func Login(w http.ResponseWriter, req *http.Request) {
-	tokenAuth = jwtauth.New("HS256", []byte(os.Getenv("SECRET")), nil)
 	tokenClaims := jwt.MapClaims{
 		"user_id": 123,
-		"exp":     3656,
+		"exp":     time.Now().Add(time.Hour * time.Duration(4000)).Unix(),
 		"iat":     time.Now().Unix(),
 		"sub":     123,
 	}

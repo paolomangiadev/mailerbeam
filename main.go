@@ -13,12 +13,13 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
 	api "github.com/paolomangiadev/mailerbeam/cmd/api"
-	"github.com/paolomangiadev/mailerbeam/cmd/auth"
+	auth "github.com/paolomangiadev/mailerbeam/cmd/auth"
 )
 
 // Routes definition
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
+
 	// Basic CORS
 	cors := cors.New(cors.Options{
 		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
@@ -30,13 +31,16 @@ func Routes() *chi.Mux {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
 
+	login := auth.Init()
+
+	// Router Middlewares
 	router.Use(
 		cors.Handler,
 		middleware.Logger,
 		middleware.DefaultCompress,
 		middleware.RedirectSlashes,
 		middleware.Recoverer,
-		jwtauth.Verifier(jwtauth.New("HS256", []byte(os.Getenv("SECRET")), nil)),
+		jwtauth.Verifier(login),
 	)
 
 	// Api Routes

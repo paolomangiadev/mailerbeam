@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/jwtauth"
 	sendgrid "github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
@@ -50,7 +51,8 @@ func (acc *Mail) Send(wg *sync.WaitGroup, client *sendgrid.Client, message *mail
 
 // Protected controller
 func Protected(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintln(w, "PROTECTED ROUTE")
+	_, claims, _ := jwtauth.FromContext(req.Context())
+	w.Write([]byte(fmt.Sprintf("PROTECTED AREA. Hi %v!!!", claims["user_id"])))
 }
 
 // SendEmail controller
