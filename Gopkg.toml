@@ -1,6 +1,6 @@
 # Gopkg.toml example
 #
-# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 #
 # required = ["github.com/user/thing/cmd/thing"]
@@ -31,7 +31,7 @@
 
 [[constraint]]
   name = "github.com/go-chi/chi"
-  version = "4.0.1"
+  version = "4.0.2"
 
 [[constraint]]
   name = "github.com/go-chi/cors"
@@ -47,12 +47,12 @@
 
 [[constraint]]
   name = "github.com/sendgrid/sendgrid-go"
-  version = "3.4.1"
+  version = "3.5.0"
 
 [prune]
   go-tests = true
   unused-packages = true
 
 [[constraint]]
-  name = "github.com/mongodb/mongo-go-driver"
-  version = "0.2.0"
+  name = "github.com/jinzhu/gorm"
+  version = "1.9.10"

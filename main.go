@@ -16,6 +16,11 @@ import (
 	auth "github.com/paolomangiadev/mailerbeam/cmd/auth"
 )
 
+import (
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+)
+
 // Routes definition
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
@@ -55,11 +60,26 @@ func Routes() *chi.Mux {
 	return router
 }
 
+type User struct {
+	gorm.Model
+	Username string
+	Email    string `gorm:"type:varchar(100);unique_index"`
+	Role     string `gorm:"size:255"`
+}
+
 func main() {
-	err := godotenv.Load(".env", "sendgrid.env")
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	db, err := gorm.Open("sqlite3", "mailerbeam.db")
+	if err != nil {
+		panic("failed to connect database")
+	}
+	defer db.Close()
+
+	// Migrate the schema
+	db.AutoMigrate(&User{})
 	port := os.Getenv("PORT")
 	r := Routes()
 	http.Handle("/", r)
