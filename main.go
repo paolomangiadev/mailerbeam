@@ -12,12 +12,11 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
-	api "github.com/paolomangiadev/mailerbeam/cmd/api"
-	auth "github.com/paolomangiadev/mailerbeam/cmd/auth"
-)
-
-import (
 	"github.com/jinzhu/gorm"
+	api "github.com/paolomangiadev/mailerbeam/app/api"
+	"github.com/paolomangiadev/mailerbeam/app/models"
+	auth "github.com/paolomangiadev/mailerbeam/cmd/auth"
+
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
@@ -60,26 +59,20 @@ func Routes() *chi.Mux {
 	return router
 }
 
-type User struct {
-	gorm.Model
-	Username string
-	Email    string `gorm:"type:varchar(100);unique_index"`
-	Role     string `gorm:"size:255"`
-}
-
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
 	db, err := gorm.Open("sqlite3", "mailerbeam.db")
 	if err != nil {
 		panic("failed to connect database")
 	}
 	defer db.Close()
-
 	// Migrate the schema
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&models.User{})
+
 	port := os.Getenv("PORT")
 	r := Routes()
 	http.Handle("/", r)
