@@ -12,12 +12,10 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
-	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	api "github.com/paolomangiadev/mailerbeam/app/api"
 	"github.com/paolomangiadev/mailerbeam/app/models"
 	auth "github.com/paolomangiadev/mailerbeam/cmd/auth"
-
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 // Routes definition
@@ -65,13 +63,12 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	db, err := gorm.Open("sqlite3", "mailerbeam.db")
-	if err != nil {
-		panic("failed to connect database")
-	}
-	defer db.Close()
 	// Migrate the schema
-	db.AutoMigrate(&models.User{})
+	/* db.AutoMigrate(&models.User{})
+	db.Create(&models.User{Name: "NewUser", Username: "newUser202", Email: "newuser202@email.com", Password: "testtest"}) */
+
+	// migrations.Exec()
+	models.Init()
 
 	port := os.Getenv("PORT")
 	r := Routes()

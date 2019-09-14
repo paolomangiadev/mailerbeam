@@ -90,6 +90,14 @@
   revision = "9c0fdb97de76d31ebbd93122c3c4b68bc9c59733"
   version = "v3.5.0"
 
+[[projects]]
+  digest = "1:1048ae210f190cd7b6aea19a92a055bd6112b025dd49f560579dfdfd76c8c42e"
+  name = "gopkg.in/gormigrate.v1"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ff46dd7d2c0b00a58540e19ca3d3f5e370fa3607"
+  version = "v1.6.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -104,6 +112,7 @@
     "github.com/joho/godotenv",
     "github.com/sendgrid/sendgrid-go",
     "github.com/sendgrid/sendgrid-go/helpers/mail",
+    "gopkg.in/gormigrate.v1",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
