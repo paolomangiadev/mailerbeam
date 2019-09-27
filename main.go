@@ -63,11 +63,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Migrate the schema
-	/* db.AutoMigrate(&models.User{})
-	db.Create(&models.User{Name: "NewUser", Username: "newUser202", Email: "newuser202@email.com", Password: "testtest"}) */
-
-	// migrations.Exec()
+	// Init DB & Models
 	models.Init()
 
 	port := os.Getenv("PORT")
