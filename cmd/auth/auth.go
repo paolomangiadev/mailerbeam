@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -10,6 +11,8 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/jwtauth"
+	"github.com/jinzhu/gorm"
+	models "github.com/paolomangiadev/mailerbeam/app/models"
 )
 
 var tokenAuth *jwtauth.JWTAuth
@@ -19,10 +22,16 @@ type Response struct {
 	Token string `json:"token"`
 }
 
+type BodyRegister struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // Routes Auth definitions
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Get("/login", Login)
+	router.Post("/register", Register)
 	return router
 }
 
@@ -50,4 +59,21 @@ func Login(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(res)
+}
+
+func Register(w http.ResponseWriter, req *http.Request) {
+	regbody := BodyRegister{}
+	// Unmarshal the body
+	err := json.NewDecoder(req.Body).Decode(&regbody)
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+		return
+	}
+
+	db := models.GetDB()
+	var user models.User
+	if err := db.Where("email = ?", regbody.Email).First(&user).Error; gorm.IsRecordNotFoundError(err) {
+		// record not found
+		w.Write([]byte(fmt.Sprintf("User with email: %v not found!!!", regbody.Email)))
+	}
 }
