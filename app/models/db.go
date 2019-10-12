@@ -16,9 +16,12 @@ func Init() {
 		panic("failed to connect database")
 	}
 	db = conn
-	defer conn.Close()
 }
 
 func GetDB() *gorm.DB {
 	return db
+}
+
+func CloseDB() error {
+	return db.Close()
 }

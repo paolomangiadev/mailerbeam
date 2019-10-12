@@ -65,6 +65,7 @@ func main() {
 
 	// Init DB & Models
 	models.Init()
+	defer models.CloseDB()
 
 	port := os.Getenv("PORT")
 	r := Routes()
