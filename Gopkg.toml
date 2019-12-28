@@ -60,3 +60,11 @@
 [[constraint]]
   branch = "master"
   name = "github.com/pilu/fresh"
+
+[[constraint]]
+  name = "github.com/asaskevich/govalidator"
+  version = "9.0.0"
+
+[[constraint]]
+  name = "github.com/unrolled/render"
+  version = "1.0.1"

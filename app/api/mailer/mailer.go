@@ -3,7 +3,6 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -59,19 +58,11 @@ func Protected(w http.ResponseWriter, req *http.Request) {
 func SendEmail(w http.ResponseWriter, req *http.Request) {
 
 	// Read Body
-	body, err := ioutil.ReadAll(req.Body)
-	defer req.Body.Close()
+	decoder := json.NewDecoder(req.Body)
+	var mailbody BodyMail
+	err := decoder.Decode(&mailbody)
 	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	mailbody := BodyMail{}
-	// Unmarshal the body
-	err = json.Unmarshal([]byte(body), &mailbody)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
+		panic(err)
 	}
 
 	// Sync Email Waitgroup

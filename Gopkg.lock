@@ -2,117 +2,107 @@
 
 
 [[projects]]
-  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/asaskevich/govalidator"
+  packages = ["."]
+  revision = "ccb8e960c48f04d6935e72476ae4a51028f9e22f"
+  version = "v9"
+
+[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
-  pruneopts = "UT"
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
   version = "v3.2.0"
 
 [[projects]]
-  digest = "1:58c033da727ebd5a6769209e479cac9a6e4dab53c879631af3d8161423099d57"
   name = "github.com/go-chi/chi"
   packages = [
     ".",
-    "middleware",
+    "middleware"
   ]
-  pruneopts = "UT"
   revision = "da24bba8dcd4021cafac38724bf10dccc97c3e36"
   version = "v4.0.2"
 
 [[projects]]
-  digest = "1:dfa416a1bb8139f30832543340f972f65c0db9932034cb6a1b42c5ac615a3fb8"
   name = "github.com/go-chi/cors"
   packages = ["."]
-  pruneopts = "UT"
   revision = "dba6525398619dead495962a916728e7ee2ca322"
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:866bac66ae32f6d18b0ccd9b0322de28846e5c1ae9bc889f3e590438a3486ae6"
   name = "github.com/go-chi/jwtauth"
   packages = ["."]
-  pruneopts = "UT"
-  revision = "47840abb19b36dcf4d3ab4123b605b28ea511bc8"
-  version = "v4.0.2"
+  revision = "38b5b1fc41f6b8558a986bce123ba4818832fda0"
+  version = "v4.0.3"
 
 [[projects]]
-  digest = "1:27f44b9a8c2995c35ec25a9948ffa96f997f8eedbc5bb34838f10dcf620aaee3"
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
-    "dialects/sqlite",
+    "dialects/sqlite"
   ]
-  pruneopts = "UT"
-  revision = "836fb2c19d84dac7b0272958dfb9af7cf0d0ade4"
-  version = "v1.9.10"
+  revision = "81c17a7e2529c59efc4e74c5b32c1fb71fb12fa2"
+  version = "v1.9.11"
 
 [[projects]]
-  digest = "1:01ed62f8f4f574d8aff1d88caee113700a2b44c42351943fa73cc1808f736a50"
   name = "github.com/jinzhu/inflection"
   packages = ["."]
-  pruneopts = "UT"
   revision = "f5c5f50e6090ae76a29240b61ae2a90dd810112e"
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:ecd9aa82687cf31d1585d4ac61d0ba180e42e8a6182b85bd785fcca8dfeefc1b"
   name = "github.com/joho/godotenv"
   packages = ["."]
-  pruneopts = "UT"
   revision = "23d116af351c84513e1946b527c88823e476be13"
   version = "v1.3.0"
 
 [[projects]]
-  digest = "1:79e87abf06b873987dee86598950f5b51732ac454d5a5cab6445a14330e6c9e3"
   name = "github.com/mattn/go-sqlite3"
   packages = ["."]
-  pruneopts = "UT"
-  revision = "b612a2feea6aa87c6d052d9086572551df06497e"
-  version = "v1.11.0"
+  revision = "53cff3fcebd1e177d04129dc131523635bc45d3d"
+  version = "v2.0.2"
 
 [[projects]]
-  digest = "1:043a68c728982a54355d57e347dd4b52ba5ab3fec50e7a57894b1baa80aa7a9e"
   name = "github.com/sendgrid/rest"
   packages = ["."]
-  pruneopts = "UT"
   revision = "306b9bef57dc36f3435ccfcc08fe6ae2c6920344"
   version = "v2.4.1"
 
 [[projects]]
-  digest = "1:2d1dca6b32a1a91c909efcb7f08b0ee7773fd32d95b376d066d99ec526d1329c"
   name = "github.com/sendgrid/sendgrid-go"
   packages = [
     ".",
-    "helpers/mail",
+    "helpers/mail"
   ]
-  pruneopts = "UT"
   revision = "9c0fdb97de76d31ebbd93122c3c4b68bc9c59733"
   version = "v3.5.0"
 
 [[projects]]
-  digest = "1:1048ae210f190cd7b6aea19a92a055bd6112b025dd49f560579dfdfd76c8c42e"
+  name = "github.com/unrolled/render"
+  packages = ["."]
+  revision = "7fc1b8f68b9beddc94385fd212c293caf729277a"
+  version = "v1.0.1"
+
+[[projects]]
   name = "gopkg.in/gormigrate.v1"
   packages = ["."]
-  pruneopts = "UT"
   revision = "ff46dd7d2c0b00a58540e19ca3d3f5e370fa3607"
   version = "v1.6.0"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/mgo.v2"
+  packages = [
+    ".",
+    "bson",
+    "internal/json",
+    "internal/sasl",
+    "internal/scram"
+  ]
+  revision = "a6b53ec6cb22a3699387a57a161566f9402ee85b"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = [
-    "github.com/dgrijalva/jwt-go",
-    "github.com/go-chi/chi",
-    "github.com/go-chi/chi/middleware",
-    "github.com/go-chi/cors",
-    "github.com/go-chi/jwtauth",
-    "github.com/jinzhu/gorm",
-    "github.com/jinzhu/gorm/dialects/sqlite",
-    "github.com/joho/godotenv",
-    "github.com/sendgrid/sendgrid-go",
-    "github.com/sendgrid/sendgrid-go/helpers/mail",
-    "gopkg.in/gormigrate.v1",
-  ]
+  inputs-digest = "45d111e014cd606a93eafa3b4eeec767a70776f2e8cffc9b70303ea83846284a"
   solver-name = "gps-cdcl"
   solver-version = 1
