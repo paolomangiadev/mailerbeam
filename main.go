@@ -63,7 +63,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	// Init DB & Models
 	models.Init()
+	defer models.CloseDB()
 
 	port := os.Getenv("PORT")
 	r := Routes()
