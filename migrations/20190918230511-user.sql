@@ -1,5 +1,5 @@
 -- +migrate Up
-CREATE TABLE [IF NOT EXISTS] users(
+CREATE TABLE users(
   id UUID NOT NULL PRIMARY KEY,
   [name] VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,

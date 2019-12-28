@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -17,7 +16,14 @@ import (
 
 // Response structure
 type Response struct {
-	Token string `json:"token"`
+	Status  string `json:"status,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+// TokenResponse structure
+type TokenResponse struct {
+	Response
+	Token string `json:"token,omitempty"`
 }
 
 // ValidationErrors type
@@ -50,19 +56,28 @@ func Init() *jwtauth.JWTAuth {
 func Register(w http.ResponseWriter, req *http.Request) {
 	// Read Body
 	decoder := json.NewDecoder(req.Body)
-	var userbody models.CreateUserRequest
-	err := decoder.Decode(&userbody)
+	var body models.CreateUserRequest
+	err := decoder.Decode(&body)
 	if err != nil {
 		panic(err)
 	}
 
 	// Validate Body
-	if isValid, err := valid.ValidateStruct(userbody); !isValid {
+	if isValid, err := valid.ValidateStruct(body); !isValid {
 		errors := valid.ErrorsByField(err)
 		render.JSON(w, 200, ValidationErrors{errors})
-	} else {
-		w.Write([]byte(fmt.Sprintf("user registered %v!!!", isValid)))
 	}
+
+	// Check if user exists
+	db := models.GetDB()
+	var user models.User
+	db.Where(&models.User{
+		Email:    body.Email,
+		Username: body.Username,
+	}).First(&user)
+	print(&user)
+	// db.Create(&user)
+	// render.JSON(w, 200, map[string]interface{}{"user": user})
 }
 
 // Login Handler
@@ -75,5 +90,5 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	}
 	_, tokenString, _ := tokenAuth.Encode(tokenClaims)
 
-	render.JSON(w, 200, Response{tokenString})
+	render.JSON(w, 200, TokenResponse{Response{"success", "User logged"}, tokenString})
 }

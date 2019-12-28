@@ -8,6 +8,7 @@ import (
 
 var db *gorm.DB
 
+// Init db
 func Init() {
 	dbName := os.Getenv("DB_NAME")
 
@@ -18,10 +19,12 @@ func Init() {
 	db = conn
 }
 
+// GetDB connection
 func GetDB() *gorm.DB {
 	return db
 }
 
+// CloseDB connection
 func CloseDB() error {
 	return db.Close()
 }
