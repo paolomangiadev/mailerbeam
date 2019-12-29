@@ -7,9 +7,9 @@ CREATE TABLE users(
   email VARCHAR(100) NOT NULL UNIQUE, 
   role VARCHAR(255) NOT NULL,
   CHECK (
-    name >= 2
-    AND username >= 2
-    AND password >= 8
+    (length(name) >= 2)
+    AND (length(username) >= 2)
+    AND (length(password) >= 8)
   )
 );
 

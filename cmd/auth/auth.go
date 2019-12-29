@@ -2,6 +2,7 @@ package auth
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -18,6 +19,12 @@ import (
 type Response struct {
 	Status  string `json:"status,omitempty"`
 	Message string `json:"message,omitempty"`
+}
+
+// DataResponse structure
+type DataResponse struct {
+	Response
+	Data models.User `json:"data"`
 }
 
 // TokenResponse structure
@@ -65,7 +72,9 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	// Validate Body
 	if isValid, err := valid.ValidateStruct(body); !isValid {
 		errors := valid.ErrorsByField(err)
-		render.JSON(w, 200, ValidationErrors{errors})
+		log.Println(errors)
+		render.JSON(w, 500, ValidationErrors{errors})
+		return
 	}
 
 	// Check if user exists
@@ -75,16 +84,23 @@ func Register(w http.ResponseWriter, req *http.Request) {
 		Email:    body.Email,
 		Username: body.Username,
 	}).First(&user).RecordNotFound() {
-		if err := db.Create(&models.User{
+		user := models.User{
+			Name:     body.Name,
 			Email:    body.Email,
 			Username: body.Username,
-		}).Error; err != nil {
-			render.JSON(w, 200, Response{"fail", "Unable to create user, error: " + err.Error()})
+			Password: body.Password,
+			Role:     "admin",
+		}
+		// Create user if doesn't exists
+		if err := db.Create(&user).Error; err != nil {
+			render.JSON(w, 500, Response{"fail", "Unable to create user, error: " + err.Error()})
 			return
 		}
-	} else {
-		render.Text(w, 200, "User already exists")
+		render.JSON(w, 200, DataResponse{Response{"success", "User Created"}, user})
+		return
 	}
+	render.JSON(w, 403, Response{"fail", "User already exists"})
+	return
 }
 
 // Login Handler
