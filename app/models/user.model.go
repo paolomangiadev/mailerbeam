@@ -26,6 +26,12 @@ type CreateUserRequest struct {
 	Password string `json:"password" valid:"required,stringlength(8|50)"`
 }
 
+// LogingUserRequest type
+type LogingUserRequest struct {
+	Email    string `json:"email" valid:"required,email"`
+	Password string `json:"password" valid:"required"`
+}
+
 // hash password with bcrypt
 func hashAndSalt(pwd []byte) string {
 	hash, err := bcrypt.GenerateFromPassword(pwd, 10)

@@ -105,8 +105,35 @@ func Register(w http.ResponseWriter, req *http.Request) {
 
 // Login Handler
 func Login(w http.ResponseWriter, req *http.Request) {
+
+	// Read Body
+	decoder := json.NewDecoder(req.Body)
+	var body models.LogingUserRequest
+	err := decoder.Decode(&body)
+	if err != nil {
+		panic(err)
+	}
+
+	// Validate Body
+	if isValid, err := valid.ValidateStruct(body); !isValid {
+		errors := valid.ErrorsByField(err)
+		log.Println(errors)
+		render.JSON(w, 500, ValidationErrors{errors})
+		return
+	}
+
+	// Check if user exists
+	db := models.GetDB()
+	var user models.User
+	if db.Where(&models.User{
+		Email: body.Email,
+	}).First(&user).RecordNotFound() {
+		render.JSON(w, 200, Response{"fail", "User doesn't exists"})
+		return
+	}
+
 	tokenClaims := jwt.MapClaims{
-		"user_id": 123,
+		"user_id": user.ID,
 		"exp":     time.Now().Add(time.Hour * time.Duration(4000)).Unix(),
 		"iat":     time.Now().Unix(),
 		"sub":     123,
