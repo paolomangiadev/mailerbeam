@@ -62,6 +62,12 @@
   version = "v2.0.2"
 
 [[projects]]
+  name = "github.com/satori/go.uuid"
+  packages = ["."]
+  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
+  version = "v1.2.0"
+
+[[projects]]
   name = "github.com/sendgrid/rest"
   packages = ["."]
   revision = "306b9bef57dc36f3435ccfcc08fe6ae2c6920344"
@@ -83,12 +89,6 @@
   version = "v1.0.1"
 
 [[projects]]
-  name = "gopkg.in/gormigrate.v1"
-  packages = ["."]
-  revision = "ff46dd7d2c0b00a58540e19ca3d3f5e370fa3607"
-  version = "v1.6.0"
-
-[[projects]]
   branch = "v2"
   name = "gopkg.in/mgo.v2"
   packages = [
@@ -103,6 +103,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "45d111e014cd606a93eafa3b4eeec767a70776f2e8cffc9b70303ea83846284a"
+  inputs-digest = "5927473289dd278eccc319aff2983cd0f116a266c5e0512fc9ea15874cac16c6"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -5,7 +5,12 @@ CREATE TABLE users(
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL, 
   email VARCHAR(100) NOT NULL UNIQUE, 
-  role VARCHAR(255) NOT NULL
+  role VARCHAR(255) NOT NULL,
+  CHECK (
+    name >= 2
+    AND username >= 2
+    AND password >= 8
+  )
 );
 
 -- +migrate Down

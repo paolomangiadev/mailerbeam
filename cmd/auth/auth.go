@@ -71,13 +71,20 @@ func Register(w http.ResponseWriter, req *http.Request) {
 	// Check if user exists
 	db := models.GetDB()
 	var user models.User
-	db.Where(&models.User{
+	if db.Where(&models.User{
 		Email:    body.Email,
 		Username: body.Username,
-	}).First(&user)
-	print(&user)
-	// db.Create(&user)
-	// render.JSON(w, 200, map[string]interface{}{"user": user})
+	}).First(&user).RecordNotFound() {
+		if err := db.Create(&models.User{
+			Email:    body.Email,
+			Username: body.Username,
+		}).Error; err != nil {
+			render.JSON(w, 200, Response{"fail", "Unable to create user, error: " + err.Error()})
+			return
+		}
+	} else {
+		render.Text(w, 200, "User already exists")
+	}
 }
 
 // Login Handler
