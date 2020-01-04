@@ -3,8 +3,8 @@ package models
 import (
 	"log"
 
+	uuid "github.com/gofrs/uuid"
 	"github.com/jinzhu/gorm"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -61,6 +61,10 @@ func (u *User) BeforeSave() (err error) {
 
 // BeforeCreate will set a UUID rather than numeric ID.
 func (u *User) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("ID", uuid.NewV4())
+	u1, err := uuid.NewV4()
+	if err != nil {
+		log.Fatalf("failed to generate UUID: %v", err)
+	}
+	scope.SetColumn("ID", u1)
 	return nil
 }

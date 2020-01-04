@@ -35,6 +35,12 @@
   version = "v4.0.3"
 
 [[projects]]
+  name = "github.com/gofrs/uuid"
+  packages = ["."]
+  revision = "6b08a5c5172ba18946672b49749cde22873dd7c2"
+  version = "v3.2.0"
+
+[[projects]]
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
@@ -89,6 +95,15 @@
   version = "v1.0.1"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = [
+    "bcrypt",
+    "blowfish"
+  ]
+  revision = "53104e6ec876ad4e22ad27cce588b01392043c1b"
+
+[[projects]]
   branch = "v2"
   name = "gopkg.in/mgo.v2"
   packages = [
@@ -103,6 +118,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5927473289dd278eccc319aff2983cd0f116a266c5e0512fc9ea15874cac16c6"
+  inputs-digest = "d56a390467a8b42386954ff2e9755cdd7644b1bfbe39f2460cf389db07e7eed2"
   solver-name = "gps-cdcl"
   solver-version = 1
