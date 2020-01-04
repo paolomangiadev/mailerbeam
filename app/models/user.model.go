@@ -41,6 +41,17 @@ func hashAndSalt(pwd []byte) string {
 	return string(hash)
 }
 
+// ComparePasswords with plain pw
+func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
+	byteHash := []byte(hashedPwd)
+	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
+}
+
 // BeforeSave func
 func (u *User) BeforeSave() (err error) {
 	hash := hashAndSalt([]byte(u.Password))

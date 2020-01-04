@@ -48,7 +48,7 @@ func init() {
 // Routes Auth definitions
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
-	router.Get("/login", Login)
+	router.Post("/login", Login)
 	router.Post("/register", Register)
 	return router
 }
@@ -132,11 +132,17 @@ func Login(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	pwdMatch := models.ComparePasswords(user.Password, []byte(body.Password))
+	if !pwdMatch {
+		render.JSON(w, 401, Response{"fail", "Authentication failed"})
+		return
+	}
+
 	tokenClaims := jwt.MapClaims{
 		"user_id": user.ID,
 		"exp":     time.Now().Add(time.Hour * time.Duration(4000)).Unix(),
 		"iat":     time.Now().Unix(),
-		"sub":     123,
+		"sub":     user.Username,
 	}
 	_, tokenString, _ := tokenAuth.Encode(tokenClaims)
 

@@ -51,7 +51,7 @@ func (acc *Mail) Send(wg *sync.WaitGroup, client *sendgrid.Client, message *mail
 // Protected controller
 func Protected(w http.ResponseWriter, req *http.Request) {
 	_, claims, _ := jwtauth.FromContext(req.Context())
-	w.Write([]byte(fmt.Sprintf("PROTECTED AREA. Hi %v!!!", claims["user_id"])))
+	w.Write([]byte(fmt.Sprintf("PROTECTED AREA. Hi %v!!!", claims["sub"])))
 }
 
 // SendEmail controller
